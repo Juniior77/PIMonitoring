@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FD"
+    tools:context="com.paris8.pimonitoring.MainActivityGraph">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graphCpu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="170dp" />
+
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graphRam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="170dp"
+                    />
+
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graphTemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="170dp" />
+
+            </TableRow>
+
+        </TableLayout>
+
+</LinearLayout>

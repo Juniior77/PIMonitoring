@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PiMonitoring</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_main_bt">MainActivityBT</string>
+    <string name="title_activity_main_wifi">MainActivityWifi</string>
+    <string name="title_activity_main_open">MainActivityOpen</string>
+    <string name="title_activity_bt_control">BtControl</string>
+
+    <string name="title_activity_fullscreen_graph">FullscreenGraph</string>
+</resources>
