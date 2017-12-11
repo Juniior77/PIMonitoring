@@ -1,147 +1,185 @@
 package com.paris8.pimonitoring;
 
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import com.github.lzyzsd.circleprogress.ArcProgress;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivityWifi extends AppCompatActivity {
 
-    private Socket socket;
-    private static final int SERVERPORT = 15006;
-    private static final String SERVER_IP = "192.168.1.22";
+    public String adr = null;
+    public int port = 0;
+    public String receive = "empty";
+    public String inputCpu;
+    public String inputRam;
+    public String inputTemp;
+    public int nbStep = 0;
+    public String mNom = "";
+    public boolean connect = false;
+    DBManager bdd = new DBManager(this);
 
-    EditText et;
+    TextView TextInfo;
     Button btnSend;
+    ArcProgress arcCpu;
+    ArcProgress arcRam;
+    ArcProgress arcTemp;
+    EditText inputIpNom;
+    EditText inputPortNbStep;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_wifi);
-        et = (EditText) findViewById(R.id.editTextClient);
-        btnSend = (Button)findViewById(R.id.button);
+        TextInfo = (TextView) findViewById(R.id.infoWifi);
+        btnSend = (Button)findViewById(R.id.btnConnectStart);
+        arcCpu = (ArcProgress)findViewById(R.id.arc_progressCpu);
+        arcCpu.setBottomText("CPU");
+        arcRam = (ArcProgress)findViewById(R.id.arc_progressRam);
+        arcRam.setBottomText("RAM");
+        arcTemp = (ArcProgress)findViewById(R.id.arc_progressTemp);
+        arcTemp.setBottomText("TEMP");
+        inputIpNom = (EditText)findViewById(R.id.editTextIPNom);
+        inputPortNbStep = (EditText)findViewById(R.id.editTextPortNbStep);
+        bdd.open();
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Thread thread = new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try  {
-                            Client mClient = new Client("192.168.1.22", 15006);
-                            mClient.sendDataWithString("Hello World");
-                            et.setText(mClient.receiveDataFromServer());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                if(connect == false){
+                    //On demande l'ip et le port pour tester une conexion
+                    adr = inputIpNom.getText().toString();
+                    port = Integer.parseInt(inputPortNbStep.getText().toString());
+                    connectServer();
+                    receive = receive.trim();
+                    if(receive.contains("Hello")){
+                        inputIpNom.setText("");
+                        inputPortNbStep.setText("");
+                        inputIpNom.setHint("Nom");
+                        inputPortNbStep.setHint("Nombre de requettes");
+                        btnSend.setText("Start !");
+                        TextInfo.setText("Connecté à " + adr.toString() +":"+port);
+                        connect = true;
                     }
-                });
+                }
+                else{
 
-                thread.start();
+                    try{
+                        nbStep = Integer.parseInt(inputPortNbStep.getText().toString());
+                        mNom = inputIpNom.getText().toString();
+                    }catch (Exception ex){
+
+                    }
+                    if(nbStep > 0 && mNom != "") {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                int stepAct = 0;
+                                Date dId = new Date();
+                                SimpleDateFormat fId = new SimpleDateFormat("yyyyMMddHHmmss");
+                                String DateID = fId.format(dId);
+
+                                Monitoring mMonitoring = new Monitoring();
+                                mMonitoring.ID = DateID;
+                                mMonitoring.NOM = mNom;
+
+                                while (stepAct != nbStep) {
+                                    sendAndReceiveData();
+                                    try {
+                                        Thread.sleep(5000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
+                                    mMonitoring.RAM = 1024 - (Integer.parseInt(inputRam.trim()) / 1024);
+
+                                    mMonitoring.TEMP = Integer.parseInt(inputTemp.trim()) / 1000;
+                                    mMonitoring.N_STEP = stepAct;
+                                    bdd.addStep(mMonitoring);
+                                    stepAct = stepAct + 1;
+                                    try {
+                                        //Log.i("CPU: ", "" + mMonitoring.CPU);
+                                        arcCpu.setProgress(mMonitoring.CPU);
+                                    } catch (Exception ex) {
+                                        try {
+                                            arcRam.setProgress(mMonitoring.RAM / 10);
+                                        } catch (Exception ex2) {
+                                            try {
+                                                arcTemp.setProgress((mMonitoring.TEMP * 90) / 100);
+                                            } catch (Exception ex3) {
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                }
+                                try {
+                                    //Log.i("CPU: ", "" + mMonitoring.CPU);
+                                    arcCpu.setProgress(0);
+                                } catch (Exception ex) {
+                                    try {
+                                        arcRam.setProgress(0);
+                                    } catch (Exception ex2) {
+                                        try {
+                                            arcTemp.setProgress(0);
+                                        } catch (Exception ex3) {
+                                        }
+                                    }
+                                }
+                                receive = "Hello";
+                                Thread.interrupted();
+                            }
+                        }).start();
+                    }
+                }
             }
         });
     }
 
-    public class Client {
-
-        /**
-         * Maximum size of buffer
-         */
-        public static final int BUFFER_SIZE = 2048;
-        private Socket socket = null;
-        private PrintWriter out = null;
-        private BufferedReader in = null;
-
-        private String host = null;
-        private int port = 15000;
-
-
-        /**
-         * Constructor with Host, Port and MAC Address
-         * @param host
-         * @param port
-         */
-        public Client(String host, int port) {
-            this.host = host;
-            this.port = port;
-        }
-
-        private void connectWithServer() {
-            try {
-                if (socket == null) {
-                    socket = new Socket("192.168.1.22", 15006);
-                    out = new PrintWriter(socket.getOutputStream());
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public void connectServer(){
+        Thread mThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    ClientTcp mClient = new ClientTcp(adr, port);
+                    mClient.sendDataWithString("0");
+                    receive=mClient.receiveDataFromServer();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+                Thread.interrupted();
             }
-        }
-
-        private void disConnectWithServer() {
-            if (socket != null) {
-                if (socket.isConnected()) {
-                    try {
-                        in.close();
-                        out.close();
-                        socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-        public void sendDataWithString(String message) {
-            if (message != null) {
-                connectWithServer();
-                out.write(message);
-                out.flush();
-            }
-        }
-
-        public String receiveDataFromServer() {
-            try {
-                String message = "";
-                int charsRead = 0;
-                char[] buffer = new char[BUFFER_SIZE];
-
-                while ((charsRead = in.read(buffer)) != -1) {
-                    message += new String(buffer).substring(0, charsRead);
-                }
-
-                disConnectWithServer(); // disconnect server
-                return message;
-            } catch (IOException e) {
-                return "Error receiving response:  " + e.getMessage();
-            }
-        }
-
-
+        });mThread.start();
     }
 
+    public void sendAndReceiveData(){
+        Thread mThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    ClientTcp mClient = new ClientTcp(adr, port);
+                    mClient.sendDataWithString("1");
+                    receive=mClient.receiveDataFromServer();
+                    try{
+                        String[] parts = receive.split(";");
+                        inputCpu = parts[0];
+                        inputRam = parts[1];
+                        inputTemp = parts[2];
+                    }catch (Exception ex){
+                        Log.i("VALUE CATCH:", "" + receive);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Thread.interrupted();
+            }
+        });mThread.start();
+    }
 }

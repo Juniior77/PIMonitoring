@@ -2,6 +2,42 @@
 <items version="2" >
 
     <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/d9dbc10cd10b77f53c1dc16121324932dd5a6e22/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="952944218ecedea1554a513dec0c14d570642843">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_29c055b70b1a4e5277753fa0ffdc1539e1bcf5ad.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/6d2dab9ff0ee6342e650038ddfb648ad188ece8a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="cddcd0fb93bc70e27325f2f715b2710332004ebb">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_f36411163af928bcb91458398f243e312c29ebab.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/usr/local/opt/android-sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="023ee503b631f69511e335a061ea008f8da60f40">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/support-annotations-26.0.0-alpha1_3c673184629f00bc49ffa3baaa669468580e3efb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/1346ed7212b4af9e8ec44f275382fbb50198e1df/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="f200454bd6851899efe021d2a4673959986edaed">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_e5ee4468ee74ea2c6b2b2707ff7153a17cad268e.jar" />
+    </item>
+    <item
         is-multidex="true"
         jar="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
@@ -11,6 +47,69 @@
         <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_c0c09ec7626db05752de59f395d1c2d7dcfe8b7d/classes.dex" />
     </item>
     <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/b91c2a26152d4e485c3f7567aa112ccb35b25174/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="88246166d5afb106f532f6e6deae683c66b42c89">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_8992e2cb664171cf7d57e79ac0b79ed99b8e73b8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/76b044f6d888210558a31d36a51f57f8c35a508d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="18d31838aa4fcc768a8a0516e22cc13b94655d89">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_3be0dc07577782d42e193bfd89e11884ea160ce5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/3c4c2d0ea8befe1a27e7366fa671792d663b7ac6/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="9935891f23923f39d002087085d9696568a9f657">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_95106734b92c0b81b5d7c73f48e78652baa1241f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/48840d2c0551e05de22e81234cf5a28830a66d4a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="47471eb19df288158b00b8d9cfa41bce7373f5cc">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_6ff466ae1fe800f631b3afc37824a3e235d34482.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/cde8f26ee30f4546a74719bb9b5451f295a160dc/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="6a022bf00ccd0948a8180c505e8e458bbddd43a6">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_81c653af54c2cc047510dcd8dd98abdff3795fdf.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/740314205ee33fe387b29dcd317fd0a736a1b23f/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_522bfff80d70f3a14e517256d7cd48ba14e9038d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/8c7274aebe82450e0390e0a7a07933371c3d0f63/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="2e92aa0163544a804a0b34f169ca61801770839a">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_450eff87f6960de3f10dee4e62cf93d82d2e8faa.jar" />
+    </item>
+    <item
         is-multidex="true"
         jar="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
@@ -18,6 +117,60 @@
         revision="26.0.1"
         sha1="b83115c1c82aa39ec2aff887912949dee3e19a00">
         <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_68307bc455d9ac5c84365fac065ffbb6e8132b82/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/df7b0255c27558da3886eb62014404ed6c7a4107/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="c4f45092eee6cdf1a5dbd597b2b6819be652ce2e">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_5ea3b98ac0db0ece87100074d15f9c6fe0085356.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/4ef8a400bb24e40a683402a251ffb81599efdc7b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="987adec819c9a98faf215814f41195da48fc724e">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_e6a77f348ac18a1275ebb050a9a3e2931fade285.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/usr/local/opt/android-sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.2/constraint-layout-solver-1.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/constraint-layout-solver-1.0.2_5292d0117aac24c3381e3f5baec403c0f25db5c1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/5e30a2e0cfa06cb5595e2813bd9bbf423568da3b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="8df0e365e40beb151bc42dee20817721a6cab7b0">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_43d18f18513ca69d9a422daab29143d9bd9b909a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/09c37cdb22a762547cc24ae2eb214b6b538f5e17/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_62fc332957a7abd5153661710daa32e09cc4cdd0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Guillaume/.android/build-cache/24a960a96089bd8d6ce536468685969881c3a512/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="fcd01fd11233459f546c437ec927e9b61bf7caf1">
+        <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/pre-dexed/debug/classes_db1d2e7f8ed8a663f6ce20460dbba080b02ae7a0.jar" />
     </item>
 
 </items>

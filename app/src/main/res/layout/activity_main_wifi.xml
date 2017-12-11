@@ -8,23 +8,95 @@
     tools:context="com.paris8.pimonitoring.MainActivityWifi">
 
 
-    <TextView
-        android:id="@+id/textViewServer"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/infoWifi"
+            android:textStyle="bold|italic"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Renseigner une source:"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="22dp"/>
+
+
+    <EditText
+        android:id="@+id/editTextIPNom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginTop="15dp"
+        android:hint="Adresse IP"
+        android:textSize="22dp"
         android:layout_gravity="center"/>
 
     <EditText
-        android:id="@+id/editTextClient"
+        android:id="@+id/editTextPortNbStep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World"
+        android:layout_marginTop="10dp"
+        android:hint="Port"
+        android:textSize="22dp"
+        android:inputType="number"
         android:layout_gravity="center"/>
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnConnectStart"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Connect" />
+
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center_horizontal|center_vertical">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="26dp">
+
+                <com.github.lzyzsd.circleprogress.ArcProgress
+                    android:background="#F5F7FD"
+                    android:id="@+id/arc_progressCpu"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+
+                <com.github.lzyzsd.circleprogress.ArcProgress
+                    android:background="#F5F7FD"
+                    android:id="@+id/arc_progressRam"
+                    android:layout_marginLeft="26dp"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+            </TableRow>
+
+        </TableLayout>
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <com.github.lzyzsd.circleprogress.ArcProgress
+                    android:background="#F5F7FD"
+                    android:id="@+id/arc_progressTemp"
+                    android:layout_marginTop="26dp"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -1,30 +1,16 @@
-/*
-Android Example to connect to and communicate with Bluetooth
-In this exercise, the target is a Arduino Due + HC-06 (Bluetooth Module)
-
-Ref:
-- Make BlueTooth connection between Android devices
-http://android-er.blogspot.com/2014/12/make-bluetooth-connection-between.html
-- Bluetooth communication between Android devices
-http://android-er.blogspot.com/2014/12/bluetooth-communication-between-android.html
- */
 package com.paris8.pimonitoring;
 
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,21 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -165,9 +146,10 @@ public class MainActivityBT extends ActionBarActivity {
                     new Thread(new Runnable() {
                         public void run(){
 
+
+                            byte[] bytesToSend = REQUEST_DATA.getBytes();
                             int nbStep = Integer.parseInt(inputTempTotal.getText().toString());
                             int stepAct = 0;
-                            byte[] bytesToSend = REQUEST_DATA.getBytes();
                             Date dId = new Date();
                             SimpleDateFormat fId = new SimpleDateFormat("yyyyMMddHHmmss");
                             String DateID = fId.format(dId);
@@ -187,7 +169,6 @@ public class MainActivityBT extends ActionBarActivity {
                                 }
                                 mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
                                 mMonitoring.RAM = 1024 - (Integer.parseInt(inputRam.trim())/1024);
-
                                 mMonitoring.TEMP = Integer.parseInt(inputTemp.trim())/1000;
                                 mMonitoring.N_STEP = stepAct;
                                 bdd.addStep(mMonitoring);
@@ -204,6 +185,19 @@ public class MainActivityBT extends ActionBarActivity {
                                         }catch (Exception ex3){
                                             continue;
                                         }
+                                    }
+                                }
+                            }
+                            try {
+                                //Log.i("CPU: ", "" + mMonitoring.CPU);
+                                arcCpu.setProgress(0);
+                            } catch (Exception ex) {
+                                try {
+                                    arcRam.setProgress(0);
+                                } catch (Exception ex2) {
+                                    try {
+                                        arcTemp.setProgress(0);
+                                    } catch (Exception ex3) {
                                     }
                                 }
                             }
