@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,7 @@ public class MainActivityBT extends ActionBarActivity {
 
     private static final int REQUEST_ENABLE_BT = 1;
     private static final String REQUEST_DATA = "1";
+    private static final String CLOSE_SOCKET = "q";
     public String inputCpu = null;
     public String inputRam = null;
     public String inputTemp = null;
@@ -58,6 +61,8 @@ public class MainActivityBT extends ActionBarActivity {
     ArcProgress arcRam;
     ArcProgress arcTemp;
     TextView TextTempEstime;
+    TextView textProgress;
+    ProgressBar progressBar;
 
     //GraphView graphCpu;
 
@@ -71,6 +76,7 @@ public class MainActivityBT extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_bt);
 
@@ -89,6 +95,9 @@ public class MainActivityBT extends ActionBarActivity {
         arcTemp = (ArcProgress)findViewById(R.id.arc_progressTemp);
         arcTemp.setBottomText("TEMP");
         TextTempEstime = (TextView)findViewById(R.id.textTempEstime);
+        textProgress = (TextView)findViewById(R.id.textProgress);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+
         bdd.open();
 
 
@@ -157,14 +166,20 @@ public class MainActivityBT extends ActionBarActivity {
                             Monitoring mMonitoring = new Monitoring();
                             mMonitoring.ID = DateID;
                             mMonitoring.NOM =  NomMonitoring;
-
+                            progressBar.setMax(nbStep);
                             while(stepAct != nbStep)
                             {
                                 //Log.i("INTERATION", "ON EST AU " + stepAct + " STEP");
                                 myThreadConnected.write(bytesToSend);
+                                try{
+                                    textProgress.setText((stepAct+1)+"/"+nbStep);
+                                }catch (Exception ex){
+                                    progressBar.setProgress(stepAct+1);
+                                }
                                 try {
                                     Thread.sleep(5000);
                                 } catch (InterruptedException e) {
+                                    Log.i("INFO THREAD:", ""+e.toString());
                                     e.printStackTrace();
                                 }
                                 mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
@@ -188,20 +203,8 @@ public class MainActivityBT extends ActionBarActivity {
                                     }
                                 }
                             }
-                            try {
-                                //Log.i("CPU: ", "" + mMonitoring.CPU);
-                                arcCpu.setProgress(0);
-                            } catch (Exception ex) {
-                                try {
-                                    arcRam.setProgress(0);
-                                } catch (Exception ex2) {
-                                    try {
-                                        arcTemp.setProgress(0);
-                                    } catch (Exception ex3) {
-                                    }
-                                }
-                            }
-                            Thread.interrupted();
+                            bytesToSend = CLOSE_SOCKET.getBytes();
+                            myThreadConnected.write(bytesToSend);
                         }
                     }).start();
                 }
@@ -284,11 +287,14 @@ public class MainActivityBT extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         bdd.close();
-        super.onDestroy();
-
+        if(myThreadConnected!=null){
+            myThreadConnected.write(CLOSE_SOCKET.getBytes());
+            myThreadConnected.cancel();
+        }
         if(myThreadConnectBTdevice!=null){
             myThreadConnectBTdevice.cancel();
         }
+        super.onDestroy();
     }
 
     @Override
@@ -450,9 +456,6 @@ public class MainActivityBT extends ActionBarActivity {
                             inputCpu = parts[0];
                             inputRam = parts[1];
                             inputTemp = parts[2];
-                            //inputCpu.trim();
-                            //inputRam.trim();
-                            //inputTemp.trim();
                         }});
 
                 } catch (IOException e) {

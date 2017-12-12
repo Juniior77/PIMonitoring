@@ -1,5 +1,6 @@
 package com.paris8.pimonitoring;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -11,7 +12,12 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
 
+import java.net.DatagramPacket;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivityGraph extends AppCompatActivity {
@@ -63,6 +69,19 @@ public class MainActivityGraph extends AppCompatActivity {
 
         for(int i = 0; i < mListMonitoring.size(); i++)
         {
+            /*String date = mListMonitoring.get(i).DATE;
+            String heure = date.substring(8, 10);
+            String minute = date.substring(10, 12);
+            String sec  = date.substring(12, 14);
+            String dateStr = heure + ":" + minute + ":" + sec;
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            Date mDate = new Date();
+            try {
+                mDate = format.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            */
             DataPoint dataCpu = new DataPoint(mListMonitoring.get(i).N_STEP, mListMonitoring.get(i).CPU);
             seriesCpu.appendData(dataCpu, false, 100, true);
             DataPoint dataRam = new DataPoint(mListMonitoring.get(i).N_STEP, mListMonitoring.get(i).RAM);

@@ -18,6 +18,7 @@
         <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
@@ -29,14 +30,17 @@
         <activity
             android:name=".MainActivityBT"
             android:label="@string/title_activity_main_bt"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivityWifi"
             android:label="@string/title_activity_main_wifi"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivityOpen"
             android:label="@string/title_activity_main_open"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivityGraph"></activity>
     </application>

@@ -115,7 +115,7 @@
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="b83115c1c82aa39ec2aff887912949dee3e19a00">
+        sha1="d6a85646bf975406ab4b3f6cf3199cc72b4c847c">
         <dex dex="/Users/Guillaume/AndroidStudioProjects/PiMonitoringBT/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_68307bc455d9ac5c84365fac065ffbb6e8132b82/classes.dex" />
     </item>
     <item

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
@@ -33,6 +34,8 @@ public class MainActivityWifi extends AppCompatActivity {
     ArcProgress arcTemp;
     EditText inputIpNom;
     EditText inputPortNbStep;
+    ProgressBar progressBarWifi;
+    TextView textProgressWifi;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class MainActivityWifi extends AppCompatActivity {
         arcTemp.setBottomText("TEMP");
         inputIpNom = (EditText)findViewById(R.id.editTextIPNom);
         inputPortNbStep = (EditText)findViewById(R.id.editTextPortNbStep);
+        progressBarWifi = (ProgressBar)findViewById(R.id.progressBarWifi);
+        textProgressWifi = (TextView)findViewById(R.id.textProgressWifi);
         bdd.open();
 
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -90,13 +95,18 @@ public class MainActivityWifi extends AppCompatActivity {
                                 Monitoring mMonitoring = new Monitoring();
                                 mMonitoring.ID = DateID;
                                 mMonitoring.NOM = mNom;
-
+                                progressBarWifi.setMax(nbStep);
                                 while (stepAct != nbStep) {
                                     sendAndReceiveData();
                                     try {
                                         Thread.sleep(5000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
+                                    }
+                                    try{
+                                        textProgressWifi.setText((stepAct+1)+"/"+nbStep);
+                                    }catch (Exception ex){
+                                        progressBarWifi.setProgress(stepAct+1);
                                     }
                                     mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
                                     mMonitoring.RAM = 1024 - (Integer.parseInt(inputRam.trim()) / 1024);

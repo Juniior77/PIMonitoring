@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     android:background="#F5F7FD"
     tools:context="com.paris8.pimonitoring.MainActivityWifi">
 
@@ -97,6 +98,21 @@
 
             </TableRow>
         </TableLayout>
+
+        <TextView
+            android:id="@+id/textProgressWifi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:id="@+id/progressBarWifi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
