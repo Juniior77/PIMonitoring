@@ -107,12 +107,12 @@
             />
 
         <ProgressBar
-            style="@android:style/Widget.ProgressBar.Horizontal"
             android:id="@+id/progressBarWifi"
+            style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            />
+            android:progressTint="@color/colorPrimary" />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

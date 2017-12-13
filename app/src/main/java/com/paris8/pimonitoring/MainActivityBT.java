@@ -45,9 +45,12 @@ public class MainActivityBT extends ActionBarActivity {
     public String inputTemp = null;
     BluetoothAdapter bluetoothAdapter;
     DBManager bdd = new DBManager(this);
+    public int nbStep;
     public String NomMonitoring;
     public int stepTmp;
     public int tempsEstime;
+    public boolean toastEtat = false;
+
 
     ArrayList<BluetoothDevice> pairedDeviceArrayList;
 
@@ -144,71 +147,106 @@ public class MainActivityBT extends ActionBarActivity {
         });
 
         btnSend.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
-                //Log.i("INFO", "ON LANCE UN THREAD POUR MONITORING");
-                if(myThreadConnected!=null){
-
-                    NomMonitoring = inputNameMonitoring.getText().toString();
-                    Toast.makeText(MainActivityBT.this, "Le monitoring "+NomMonitoring+" est en cours d'exécution !", Toast.LENGTH_LONG).show();
-                    new Thread(new Runnable() {
-                        public void run(){
 
 
-                            byte[] bytesToSend = REQUEST_DATA.getBytes();
-                            int nbStep = Integer.parseInt(inputTempTotal.getText().toString());
-                            int stepAct = 0;
-                            Date dId = new Date();
-                            SimpleDateFormat fId = new SimpleDateFormat("yyyyMMddHHmmss");
-                            String DateID = fId.format(dId);
 
-                            Monitoring mMonitoring = new Monitoring();
-                            mMonitoring.ID = DateID;
-                            mMonitoring.NOM =  NomMonitoring;
-                            progressBar.setMax(nbStep);
-                            while(stepAct != nbStep)
-                            {
-                                //Log.i("INTERATION", "ON EST AU " + stepAct + " STEP");
-                                myThreadConnected.write(bytesToSend);
-                                try{
-                                    textProgress.setText((stepAct+1)+"/"+nbStep);
-                                }catch (Exception ex){
-                                    progressBar.setProgress(stepAct+1);
-                                }
-                                try {
-                                    Thread.sleep(5000);
-                                } catch (InterruptedException e) {
-                                    Log.i("INFO THREAD:", ""+e.toString());
-                                    e.printStackTrace();
-                                }
-                                mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
-                                mMonitoring.RAM = 1024 - (Integer.parseInt(inputRam.trim())/1024);
-                                mMonitoring.TEMP = Integer.parseInt(inputTemp.trim())/1000;
-                                mMonitoring.N_STEP = stepAct;
-                                bdd.addStep(mMonitoring);
-                                stepAct = stepAct + 1;
-                                try{
-                                    //Log.i("CPU: ", "" + mMonitoring.CPU);
-                                    arcCpu.setProgress(mMonitoring.CPU);
-                                }catch (Exception ex){
-                                    try{
-                                        arcRam.setProgress(mMonitoring.RAM/10);
-                                    }catch (Exception ex2){
-                                        try{
-                                            arcTemp.setProgress((mMonitoring.TEMP*90)/100);
-                                        }catch (Exception ex3){
-                                            continue;
+                    //Log.i("INFO", "ON LANCE UN THREAD POUR MONITORING");
+                    if (myThreadConnected != null) {
+
+                        try{
+                            NomMonitoring = inputNameMonitoring.getText().toString();
+                            nbStep = Integer.parseInt(inputTempTotal.getText().toString());
+                        }
+                        catch (Exception ex){
+                            if(NomMonitoring.isEmpty()){
+                                Toast.makeText(MainActivityBT.this, "Le nom n'est pas renseigné", Toast.LENGTH_LONG).show();
+                                toastEtat = true;
+                            }
+                            Toast.makeText(MainActivityBT.this, "Le nombre de requette n'est pas valide: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                            toastEtat = true;
+                        }
+                        if(!NomMonitoring.isEmpty() && nbStep > 0)
+                        {
+                            Toast.makeText(MainActivityBT.this, "Le monitoring " + NomMonitoring + " est en cours d'exécution !", Toast.LENGTH_LONG).show();
+                            new Thread(new Runnable() {
+                                public void run() {
+
+
+                                    byte[] bytesToSend = REQUEST_DATA.getBytes();
+                                    int stepAct = 0;
+                                    Date dId = new Date();
+                                    SimpleDateFormat fId = new SimpleDateFormat("yyyyMMddHHmmss");
+                                    String DateID = fId.format(dId);
+
+                                    Monitoring mMonitoring = new Monitoring();
+                                    mMonitoring.ID = DateID;
+                                    mMonitoring.NOM = NomMonitoring;
+                                    progressBar.setMax(nbStep);
+                                    while (stepAct != nbStep+1) {
+                                        if(stepAct == nbStep){
+                                            //Tu reinitialise
+                                            try {
+                                                //Log.i("CPU: ", "" + mMonitoring.CPU);
+                                                progressBar.setProgress(0);
+                                                textStatus.setText("");
+                                            } catch (Exception ex) {
+                                                continue;
+                                            }
+                                        }else{
+
+
+                                        //Log.i("INTERATION", "ON EST AU " + stepAct + " STEP");
+                                        myThreadConnected.write(bytesToSend);
+                                        try {
+                                            textProgress.setText((stepAct + 1) + "/" + nbStep);
+                                        } catch (Exception ex) {
+                                            progressBar.setProgress(stepAct + 1);
+                                        }
+                                        try {
+                                            Thread.sleep(5000);
+                                        } catch (InterruptedException e) {
+                                            Log.i("INFO THREAD:", "" + e.toString());
+                                            e.printStackTrace();
+                                        }
+                                        mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
+                                        mMonitoring.RAM = 1024 - (Integer.parseInt(inputRam.trim()) / 1024);
+                                        mMonitoring.TEMP = Integer.parseInt(inputTemp.trim()) / 1000;
+                                        mMonitoring.N_STEP = stepAct;
+                                        bdd.addStep(mMonitoring);
+                                        stepAct = stepAct + 1;
+                                        try {
+                                            //Log.i("CPU: ", "" + mMonitoring.CPU);
+                                            arcCpu.setProgress(mMonitoring.CPU);
+                                        } catch (Exception ex) {
+                                            try {
+                                                arcRam.setProgress(mMonitoring.RAM / 10);
+                                            } catch (Exception ex2) {
+                                                try {
+                                                    arcTemp.setProgress((mMonitoring.TEMP * 90) / 100);
+                                                } catch (Exception ex3) {
+                                                    continue;
+                                                }
+                                            }
+                                        }
                                         }
                                     }
+                                    bytesToSend = CLOSE_SOCKET.getBytes();
+                                    myThreadConnected.write(bytesToSend);
                                 }
-                            }
-                            bytesToSend = CLOSE_SOCKET.getBytes();
-                            myThreadConnected.write(bytesToSend);
+                            }).start();
                         }
-                    }).start();
-                }
-            }});
+                        else{
+                            if(toastEtat == false)
+                                Toast.makeText(MainActivityBT.this, "Veuillez renseigner un Nom et un nombre de requettes !", Toast.LENGTH_LONG).show();
+                        }
+                        toastEtat = false;
+                    }
+        }
+    });
+
+
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)){
             Toast.makeText(this,

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
 
@@ -25,6 +26,7 @@ public class MainActivityWifi extends AppCompatActivity {
     public int nbStep = 0;
     public String mNom = "";
     public boolean connect = false;
+    public boolean toastEtat = false;
     DBManager bdd = new DBManager(this);
 
     TextView TextInfo;
@@ -60,33 +62,52 @@ public class MainActivityWifi extends AppCompatActivity {
 
                 if(connect == false){
                     //On demande l'ip et le port pour tester une conexion
-                    adr = inputIpNom.getText().toString();
-                    port = Integer.parseInt(inputPortNbStep.getText().toString());
-                    connectServer();
-                    receive = receive.trim();
-                    if(receive.contains("Hello")){
-                        inputIpNom.setText("");
-                        inputPortNbStep.setText("");
-                        inputIpNom.setHint("Nom");
-                        inputPortNbStep.setHint("Nombre de requettes");
-                        btnSend.setText("Start !");
-                        TextInfo.setText("Connecté à " + adr.toString() +":"+port);
-                        connect = true;
+                    try{
+                        adr = inputIpNom.getText().toString();
+                        port = Integer.parseInt(inputPortNbStep.getText().toString());
+                        if(!adr.isEmpty() && port > 0){
+                            connectServer();
+                            receive = receive.trim();
+                            if(receive.contains("Hello")){
+                                inputIpNom.setText("");
+                                inputPortNbStep.setText("");
+                                inputIpNom.setHint("Nom");
+                                inputPortNbStep.setHint("Nombre de requettes");
+                                btnSend.setText("Start !");
+                                TextInfo.setText("Connecté à " + adr.toString() +":"+port);
+                                connect = true;
+                            }
+                        }
+                    }catch (Exception ex){
+                        if(adr.isEmpty()){
+                            Toast.makeText(MainActivityWifi.this, "Veuillez renseigner une IP !", Toast.LENGTH_LONG).show();
+                        }
+                        if(port <= 0){
+                            Toast.makeText(MainActivityWifi.this, "Veuillez renseigner un PORT d'écoute !", Toast.LENGTH_LONG).show();
+                        }
                     }
+
+
                 }
                 else{
 
                     try{
-                        nbStep = Integer.parseInt(inputPortNbStep.getText().toString());
                         mNom = inputIpNom.getText().toString();
+                        nbStep = Integer.parseInt(inputPortNbStep.getText().toString());
                     }catch (Exception ex){
-
+                        if(mNom.isEmpty()){
+                            Toast.makeText(MainActivityWifi.this, "Veuillez renseigner un Nom !", Toast.LENGTH_LONG).show();
+                        }
+                        if(nbStep <= 0){
+                            Toast.makeText(MainActivityWifi.this, "Veuillez renseigner un nombre de requettes ! " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                        toastEtat = true;
                     }
-                    if(nbStep > 0 && mNom != "") {
+                    if(nbStep > 0 && !mNom.isEmpty()) {
+                        Toast.makeText(MainActivityWifi.this, "Le monitoring "+ mNom + " est en cours d'execution !", Toast.LENGTH_LONG).show();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-
                                 int stepAct = 0;
                                 Date dId = new Date();
                                 SimpleDateFormat fId = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -96,58 +117,63 @@ public class MainActivityWifi extends AppCompatActivity {
                                 mMonitoring.ID = DateID;
                                 mMonitoring.NOM = mNom;
                                 progressBarWifi.setMax(nbStep);
-                                while (stepAct != nbStep) {
-                                    sendAndReceiveData();
-                                    try {
-                                        Thread.sleep(5000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    try{
-                                        textProgressWifi.setText((stepAct+1)+"/"+nbStep);
-                                    }catch (Exception ex){
-                                        progressBarWifi.setProgress(stepAct+1);
-                                    }
-                                    mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
-                                    mMonitoring.RAM = 1024 - (Integer.parseInt(inputRam.trim()) / 1024);
-
-                                    mMonitoring.TEMP = Integer.parseInt(inputTemp.trim()) / 1000;
-                                    mMonitoring.N_STEP = stepAct;
-                                    bdd.addStep(mMonitoring);
-                                    stepAct = stepAct + 1;
-                                    try {
-                                        //Log.i("CPU: ", "" + mMonitoring.CPU);
-                                        arcCpu.setProgress(mMonitoring.CPU);
-                                    } catch (Exception ex) {
+                                while (stepAct != nbStep+1) {
+                                    if(stepAct == nbStep){
+                                        //Tu reinitialise
                                         try {
-                                            arcRam.setProgress(mMonitoring.RAM / 10);
-                                        } catch (Exception ex2) {
+                                            //Log.i("CPU: ", "" + mMonitoring.CPU);
+                                            progressBarWifi.setProgress(0);
+                                            textProgressWifi.setText("");
+                                        } catch (Exception ex) {
+                                            continue;
+                                        }
+                                    }
+                                    else{
+                                        sendAndReceiveData();
+                                        try {
+                                            Thread.sleep(5000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        try{
+                                            textProgressWifi.setText((stepAct+1)+"/"+nbStep);
+                                        }catch (Exception ex){
+                                            progressBarWifi.setProgress(stepAct+1);
+                                        }
+                                        mMonitoring.CPU = 100 - Integer.parseInt(inputCpu.trim());
+                                        mMonitoring.RAM = 1024 - (Integer.parseInt(inputRam.trim()) / 1024);
+
+                                        mMonitoring.TEMP = Integer.parseInt(inputTemp.trim()) / 1000;
+                                        mMonitoring.N_STEP = stepAct;
+                                        bdd.addStep(mMonitoring);
+                                        stepAct = stepAct + 1;
+                                        try {
+                                            //Log.i("CPU: ", "" + mMonitoring.CPU);
+                                            arcCpu.setProgress(mMonitoring.CPU);
+                                        } catch (Exception ex) {
                                             try {
-                                                arcTemp.setProgress((mMonitoring.TEMP * 90) / 100);
-                                            } catch (Exception ex3) {
-                                                continue;
+                                                arcRam.setProgress(mMonitoring.RAM / 10);
+                                            } catch (Exception ex2) {
+                                                try {
+                                                    arcTemp.setProgress((mMonitoring.TEMP * 90) / 100);
+                                                } catch (Exception ex3) {
+                                                    continue;
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                try {
-                                    //Log.i("CPU: ", "" + mMonitoring.CPU);
-                                    arcCpu.setProgress(0);
-                                } catch (Exception ex) {
-                                    try {
-                                        arcRam.setProgress(0);
-                                    } catch (Exception ex2) {
-                                        try {
-                                            arcTemp.setProgress(0);
-                                        } catch (Exception ex3) {
-                                        }
-                                    }
+
                                 }
                                 receive = "Hello";
-                                Thread.interrupted();
                             }
                         }).start();
                     }
+
+                    else{
+                        if(toastEtat == false)
+                            Toast.makeText(MainActivityWifi.this, "Veuillez renseigner un Nom et un nombre de requettes !", Toast.LENGTH_LONG).show();
+                    }
+                    toastEtat = false;
                 }
             }
         });

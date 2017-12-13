@@ -95,8 +95,12 @@ public class DBManager {
         }
         return myListMonitoring;
     }
+    public void delete(String ID){
+        db.execSQL("DELETE FROM MONITORING WHERE ID = '" + ID+"';");
+    }
     public String[] getListMonitoringByDate(String Date, String Nom){
 
+        open();
         String ReqSql = new String();
         if(Date != null && Nom == null)
         {
@@ -128,6 +132,7 @@ public class DBManager {
             }
             mCursor.close();
         }
+        close();
         return listMoni;
     }
 }

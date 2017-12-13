@@ -3,6 +3,8 @@ package com.paris8.pimonitoring;
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
@@ -24,6 +26,7 @@ public class MainActivityGraph extends AppCompatActivity {
 
     DBManager bdd = new DBManager(this);
     List<Monitoring> mListMonitoring = new ArrayList<Monitoring>();
+    String ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class MainActivityGraph extends AppCompatActivity {
 
         bdd.open();
 
-        String ID = getIntent().getStringExtra("id");
+        ID = getIntent().getStringExtra("id");
         mListMonitoring = bdd.getMonitoringByID(ID);
         LineGraphSeries<DataPoint> seriesCpu = new LineGraphSeries<>();
         LineGraphSeries<DataPoint> seriesRam = new LineGraphSeries<>();
@@ -96,5 +99,32 @@ public class MainActivityGraph extends AppCompatActivity {
 
         bdd.close();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //ajoute les entrées de menu_test à l'ActionBar
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    public void delete(){
+        bdd.open();
+        bdd.delete(ID);
+        bdd.close();
+        Toast.makeText(MainActivityGraph.this, "Le monitoring " + mListMonitoring.get(0).NOM + " à bien été supprimer !" , Toast.LENGTH_SHORT).show();
+
+    }
+
+    //gère le click sur une action de l'ActionBar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_delete:
+                delete();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
